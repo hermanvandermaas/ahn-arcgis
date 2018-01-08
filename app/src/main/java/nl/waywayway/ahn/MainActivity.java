@@ -2,6 +2,7 @@ package nl.waywayway.ahn;
 
 import android.os.*;
 import android.support.v7.app.*;
+import android.support.v7.widget.*;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
 
@@ -14,10 +15,20 @@ implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+		makeToolbar();
+		
 		MapFragment mapFragment = (MapFragment) getFragmentManager()
             .findFragmentById(R.id.map);
 		mapFragment.getMapAsync(this);
     }
+	
+	// Maak toolbar
+	private void makeToolbar()
+	{
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+		ActionBar actionBar = getSupportActionBar();
+	}
 	
 	public void onMapReady(GoogleMap googleMap)
 	{

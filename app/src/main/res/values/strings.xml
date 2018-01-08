@@ -3,5 +3,5 @@
 
     <string name="app_name">AHN</string>
     <string name="hello_world">Hello world!</string>
-
+	<string name="google_maps_key">AIzaSyCno_hVSMtgIUeNod6t8WcmXvASzdjuazc</string>
 </resources>

@@ -7,7 +7,7 @@ import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
 
 public class MainActivity extends AppCompatActivity
-implements OnMapReadyCallback
+	implements OnMapReadyCallback
 {
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -30,6 +30,7 @@ implements OnMapReadyCallback
 		ActionBar actionBar = getSupportActionBar();
 	}
 	
+	@Override
 	public void onMapReady(GoogleMap googleMap)
 	{
         LatLng sydney = new LatLng(-33.852, 151.211);

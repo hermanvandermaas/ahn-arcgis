@@ -1,19 +1,30 @@
 package nl.waywayway.ahn;
 
+import android.app.*;
+import android.content.*;
 import android.os.*;
 import android.support.v7.app.*;
 import android.support.v7.widget.*;
+import android.util.*;
+import com.google.android.gms.common.*;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
+
+import android.support.v7.app.ActionBar;
 
 public class MainActivity extends AppCompatActivity
 	implements OnMapReadyCallback
 {
+	private boolean dialogWasShowed = false;
+	private Context context;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+		
+		context = this;
 
 		makeToolbar();
 		
@@ -38,4 +49,23 @@ public class MainActivity extends AppCompatActivity
 							.title("Marker in Sydney"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
+	
+	// Check beschikbaarheid Play Services
+	protected void isPlayServicesAvailable()
+	{
+		if (dialogWasShowed) return;
+
+		GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+		int resultCode = apiAvailability.isGooglePlayServicesAvailable(context);
+
+		if (resultCode != ConnectionResult.SUCCESS)
+		{
+			Log.i("HermLog", "Play Services fout");
+			if (apiAvailability.isUserResolvableError(resultCode))
+			{
+				apiAvailability.getErrorDialog((Activity) context, resultCode, 9000).show();
+				dialogWasShowed = true;
+			}
+		}
+	}
 }

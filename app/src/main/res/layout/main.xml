@@ -11,29 +11,36 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
-		<android.support.design.widget.AppBarLayout
-			android:id="@+id/appbarlayout"
+		<RelativeLayout
+			android:id="@+id/toolbar_and_progressbar"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content">
 
-			<android.support.v7.widget.Toolbar
-				android:id="@+id/toolbar"
+			<android.support.design.widget.AppBarLayout
+				android:id="@+id/appbarlayout"
 				android:layout_width="match_parent"
-				android:layout_height="?attr/actionBarSize"
-				android:background="?attr/colorPrimary"
-				android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-				app:popupTheme="@style/overflow_menu">
+				android:layout_height="wrap_content">
 
-				<ProgressBar
-					android:id="@+id/toolbar_progress_bar"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:indeterminate="true"
-					android:layout_gravity="right"
-					android:visibility="visible"/>
+				<android.support.v7.widget.Toolbar
+					android:id="@+id/toolbar"
+					android:layout_width="match_parent"
+					android:layout_height="?attr/actionBarSize"
+					android:background="?attr/colorPrimary"
+					android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+					app:popupTheme="@style/overflow_menu">
+				</android.support.v7.widget.Toolbar>
+			</android.support.design.widget.AppBarLayout>
 
-			</android.support.v7.widget.Toolbar>
-		</android.support.design.widget.AppBarLayout>
+			<ProgressBar
+				android:id="@+id/progress_bar"
+				style="@android:style/Widget.ProgressBar.Horizontal"
+				android:layout_below="@+id/appbarlayout"
+				android:layout_width="match_parent"
+				android:layout_height="2dp"
+				android:visibility="gone"
+				android:progress="0" />
+
+		</RelativeLayout>
 
 		<fragment
 			xmlns:tools="http://schemas.android.com/tools"
@@ -41,7 +48,7 @@
 			android:name="com.google.android.gms.maps.MapFragment"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:layout_below="@+id/appbarlayout"
+			android:layout_below="@+id/toolbar_and_progressbar"
 			tools:context=".MainActivity"
 			class="com.google.android.gms.maps.MapFragment" />
 

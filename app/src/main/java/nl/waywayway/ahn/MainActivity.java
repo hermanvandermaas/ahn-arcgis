@@ -25,12 +25,12 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.main);
 		
 		context = this;
-
-		makeToolbar();
 		
 		MapFragment mapFragment = (MapFragment) getFragmentManager()
             .findFragmentById(R.id.map);
 		mapFragment.getMapAsync(this);
+		
+		makeToolbar();
     }
 	
 	// Maak toolbar

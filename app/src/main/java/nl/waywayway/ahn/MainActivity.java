@@ -68,4 +68,14 @@ public class MainActivity extends AppCompatActivity
 			}
 		}
 	}
+	
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		Log.i("HermLog", "onResume()");
+
+		// Check beschikbaarheid Google Play services
+		isPlayServicesAvailable();
+	}
 }

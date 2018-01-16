@@ -10,6 +10,7 @@ import android.view.*;
 import com.google.android.gms.common.*;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
+import java.net.*;
 
 import android.support.v7.app.ActionBar;
 
@@ -47,10 +48,17 @@ implements OnMapReadyCallback
 	@Override
 	public void onMapReady(GoogleMap googleMap)
 	{
+		UiSettings uiSettings = googleMap.getUiSettings();
+		uiSettings.setCompassEnabled(false);
+		
+		// Plaats marker
         LatLng sydney = new LatLng(-33.852, 151.211);
         googleMap.addMarker(new MarkerOptions().position(sydney)
 							.title("Marker in Sydney"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+		
+		// Maak TileOverlay
+		TileOverlay tileOverlay = googleMap.addTileOverlay(new TileOverlayOptions().tileProvider(getTileProvider()));
     }
 
 	// Check beschikbaarheid Play Services
@@ -89,6 +97,47 @@ implements OnMapReadyCallback
 		return result;
 	}
 
+	private TileProvider getTileProvider()
+	{
+		TileProvider tileProvider = new UrlTileProvider(256, 256)
+		{
+			@Override
+			public URL getTileUrl(int x, int y, int zoom)
+			{
+				String s = String.format("", zoom, x, y);
+				
+				if (!checkTileExists(x, y, zoom))
+				{
+					return null;
+				}
+				
+				try
+				{
+					return new URL(s);
+				}
+				catch (MalformedURLException e)
+				{
+					throw new AssertionError(e);
+				}
+			}
+			
+			private boolean checkTileExists(int x, int y, int zoom)
+			{
+				int minZoom = 12;
+				int maxZoom = 16;
+				
+				if (zoom < minZoom || zoom > maxZoom)
+				{
+					return false;
+				}
+				
+				return true;
+			}
+		};
+		
+		return tileProvider;
+	}
+	
 	@Override
 	protected void onResume()
 	{

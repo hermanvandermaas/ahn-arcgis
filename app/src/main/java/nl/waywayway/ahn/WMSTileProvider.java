@@ -44,7 +44,7 @@ public class WMSTileProvider extends UrlTileProvider
     }
 
 	// return a wms tile layer
-	private static TileProvider getTileProvider() {
+	public static TileProvider getTileProvider() {
 		return new WMSTileProvider(256,256);
 	}
 	

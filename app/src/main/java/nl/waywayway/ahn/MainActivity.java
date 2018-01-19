@@ -48,17 +48,16 @@ implements OnMapReadyCallback
 	@Override
 	public void onMapReady(GoogleMap googleMap)
 	{
+		// Instellingen basiskaart
 		UiSettings uiSettings = googleMap.getUiSettings();
 		uiSettings.setCompassEnabled(false);
 		
-		// Plaats marker
+		// Richt camera
         LatLng sydney = new LatLng(-33.852, 151.211);
-        googleMap.addMarker(new MarkerOptions().position(sydney)
-							.title("Marker in Sydney"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 		
 		// Maak TileOverlay
-		TileOverlay tileOverlay = googleMap.addTileOverlay(new TileOverlayOptions().tileProvider(getTileProvider()));
+		TileOverlay tileOverlay = googleMap.addTileOverlay(new TileOverlayOptions().tileProvider(WMSTileProvider.getTileProvider()));
     }
 
 	// Check beschikbaarheid Play Services
@@ -97,6 +96,7 @@ implements OnMapReadyCallback
 		return result;
 	}
 
+	// UrlTileProvider voor WMTS kaartlaag
 	private TileProvider getTileProvider()
 	{
 		TileProvider tileProvider = new UrlTileProvider(256, 256)

@@ -1,5 +1,6 @@
 package nl.waywayway.ahn;
 
+import android.util.*;
 import com.google.android.gms.maps.model.*;
 import java.net.*;
 import java.util.*;
@@ -24,19 +25,27 @@ public class WMSTileProvider extends UrlTileProvider
     protected static final int MINY = 2;
     protected static final int MAXY = 3;
 	
+	// bounding box van de hele kaart
+	// 361403.7366878665, 6573443.017669047, 807808.8874921346, 7082066.659439815
+	protected static final double MINX_MAP = 
+	protected static final double MAXX_MAP = 
+	protected static final double MINY_MAP = 
+	protected static final double MAXY_MAP = 
+	
 	private static final String URL_FORMAT =
-	"http://yourApp.org/geoserver/wms" +
-	"?service=WMS" +
-	"&version=1.1.1" +
-	"&request=GetMap" +
-	"&layers=yourLayer" +
-	"&bbox=%f,%f,%f,%f" +
-	"&width=256" +
-	"&height=256" +
-	"&srs=EPSG:900913" +
-	"&format=image/png" +
-	"&transparent=true";
-
+		"https://geodata.nationaalgeoregister.nl/ahn2/ows" +
+		"?service=WMS" +
+		"&version=1.3.0" +
+		"&request=GetMap" +
+		"&layers=ahn2_05m_int" +
+		"&styles=ahn2:ahn2_05m_detail" +
+		"&bbox=%f,%f,%f,%f" +
+		"&width=256" +
+		"&height=256" +
+		"&srs=EPSG:3857" +
+		"&format=image/png" +
+		"&transparent=true";
+	
     // Construct with tile size in pixels, normally 256, see parent class
     public WMSTileProvider(int x, int y)
 	{
@@ -53,15 +62,24 @@ public class WMSTileProvider extends UrlTileProvider
 		double[] bbox = getBoundingBox(x, y, zoom);
 		String s = String.format(Locale.US, URL_FORMAT, bbox[MINX],
 								 bbox[MINY], bbox[MAXX], bbox[MAXY]);
-		URL url = null;
+								 
+		if (!tileExists(bbox))
+		{
+			return null;
+		}
 		
 		try {
-			url = new URL(s);
+			return new URL(s);
 		} catch (MalformedURLException e) {
 			throw new AssertionError(e);
 		}
+	}
+
+	private boolean tileExists(double[] bbox)
+	{
 		
-		return url;
+		
+		return false;
 	}
 
     // Return a web Mercator bounding box given tile x/y indexes and a zoom
@@ -79,6 +97,8 @@ public class WMSTileProvider extends UrlTileProvider
     	bbox[MINY] = miny;
     	bbox[MAXX] = maxx;
     	bbox[MAXY] = maxy;
+		
+		Log.i("HermLog", bbox.toString());
 
     	return bbox;
     }

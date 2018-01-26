@@ -5,12 +5,15 @@ import android.os.*;
 import android.support.v7.app.*;
 import android.support.v7.widget.*;
 import android.view.*;
+import com.esri.arcgisruntime.mapping.*;
+import com.esri.arcgisruntime.mapping.view.*;
+import com.esri.arcgisruntime.*;
 
 public class MainActivity extends AppCompatActivity
 {
 	private Context context;
-	private MapView map;
-
+	private MapView mapView;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -21,7 +24,21 @@ public class MainActivity extends AppCompatActivity
 
 		makeToolbar();
 		setTransparentStatusBar();
+		setLicense();
+		makeMapView();
     }
+
+	private void setLicense()
+	{
+		ArcGISRuntimeEnvironment.setLicense("runtimelite,1000,rud3657265403,none,8SH93PJPXJK94P7EJ029");
+	}
+
+	private void makeMapView()
+	{
+		mapView = (MapView) findViewById(R.id.map);
+		ArcGISMap map = new ArcGISMap(Basemap.Type.TOPOGRAPHIC, 34.056295, -117.195800, 16);
+		mapView.setMap(map);
+	}
 
 	// Maak toolbar
 	private void makeToolbar()
@@ -47,5 +64,17 @@ public class MainActivity extends AppCompatActivity
 			result = getResources().getDimensionPixelSize(resourceId);
 		}
 		return result;
+	}
+	
+	@Override 
+	protected void onPause(){
+		mapView.pause();
+		super.onPause();
+	}
+
+	@Override 
+	protected void onResume(){
+		super.onResume();
+		mapView.resume();
 	}
 }

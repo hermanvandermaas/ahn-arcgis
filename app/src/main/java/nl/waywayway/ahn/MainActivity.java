@@ -1,24 +1,15 @@
 package nl.waywayway.ahn;
 
-import android.app.*;
 import android.content.*;
 import android.os.*;
 import android.support.v7.app.*;
 import android.support.v7.widget.*;
-import android.util.*;
 import android.view.*;
-import com.google.android.gms.common.*;
-import com.google.android.gms.maps.*;
-import com.google.android.gms.maps.model.*;
-import java.net.*;
-
-import android.support.v7.app.ActionBar;
 
 public class MainActivity extends AppCompatActivity
-implements OnMapReadyCallback
 {
-	private boolean dialogWasShowed = false;
 	private Context context;
+	private MapView map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -27,10 +18,6 @@ implements OnMapReadyCallback
         setContentView(R.layout.main);
 
 		context = this;
-
-		MapFragment mapFragment = (MapFragment) getFragmentManager()
-            .findFragmentById(R.id.map);
-		mapFragment.getMapAsync(this);
 
 		makeToolbar();
 		setTransparentStatusBar();
@@ -43,40 +30,6 @@ implements OnMapReadyCallback
 		setSupportActionBar(toolbar);
 		ActionBar actionBar = getSupportActionBar();
 		toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
-	}
-
-	@Override
-	public void onMapReady(GoogleMap googleMap)
-	{
-		// Instellingen basiskaart
-		UiSettings uiSettings = googleMap.getUiSettings();
-		uiSettings.setCompassEnabled(false);
-		
-		// Richt camera
-        LatLng sydney = new LatLng(-33.852, 151.211);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-		
-		// Maak TileOverlay
-		TileOverlay tileOverlay = googleMap.addTileOverlay(new TileOverlayOptions().tileProvider(WMSTileProvider.getTileProvider()));
-    }
-
-	// Check beschikbaarheid Play Services
-	protected void isPlayServicesAvailable()
-	{
-		if (dialogWasShowed) return;
-
-		GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-		int resultCode = apiAvailability.isGooglePlayServicesAvailable(context);
-
-		if (resultCode != ConnectionResult.SUCCESS)
-		{
-			Log.i("HermLog", "Play Services fout");
-			if (apiAvailability.isUserResolvableError(resultCode))
-			{
-				apiAvailability.getErrorDialog((Activity) context, resultCode, 9000).show();
-				dialogWasShowed = true;
-			}
-		}
 	}
 
 	private void setTransparentStatusBar()
@@ -94,57 +47,5 @@ implements OnMapReadyCallback
 			result = getResources().getDimensionPixelSize(resourceId);
 		}
 		return result;
-	}
-
-	// UrlTileProvider voor WMTS kaartlaag
-	private TileProvider getTileProvider()
-	{
-		TileProvider tileProvider = new UrlTileProvider(256, 256)
-		{
-			@Override
-			public URL getTileUrl(int x, int y, int zoom)
-			{
-				String s = String.format("", zoom, x, y);
-				
-				if (!checkTileExists(x, y, zoom))
-				{
-					return null;
-				}
-				
-				try
-				{
-					return new URL(s);
-				}
-				catch (MalformedURLException e)
-				{
-					throw new AssertionError(e);
-				}
-			}
-			
-			private boolean checkTileExists(int x, int y, int zoom)
-			{
-				int minZoom = 12;
-				int maxZoom = 16;
-				
-				if (zoom < minZoom || zoom > maxZoom)
-				{
-					return false;
-				}
-				
-				return true;
-			}
-		};
-		
-		return tileProvider;
-	}
-	
-	@Override
-	protected void onResume()
-	{
-		super.onResume();
-		Log.i("HermLog", "onResume()");
-
-		// Check beschikbaarheid Google Play services
-		isPlayServicesAvailable();
 	}
 }

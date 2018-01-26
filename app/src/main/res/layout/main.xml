@@ -6,15 +6,12 @@
 	android:id="@+id/coordinator"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
-	
-	<fragment
-		xmlns:tools="http://schemas.android.com/tools"
+
+	<com.esri.arcgisruntime.mapping.view.MapView
 		android:id="@+id/map"
-		android:name="com.google.android.gms.maps.MapFragment"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		tools:context=".MainActivity"
-		class="com.google.android.gms.maps.MapFragment" />
+		android:layout_height="match_parent" >
+	</com.esri.arcgisruntime.mapping.view.MapView>
 
 	<RelativeLayout
 		android:id="@+id/toolbar_and_progressbar"

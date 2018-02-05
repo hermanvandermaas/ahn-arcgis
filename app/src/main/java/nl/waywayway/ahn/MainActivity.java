@@ -8,6 +8,8 @@ import android.view.*;
 import com.esri.arcgisruntime.mapping.*;
 import com.esri.arcgisruntime.mapping.view.*;
 import com.esri.arcgisruntime.*;
+import com.esri.arcgisruntime.geometry.*;
+import com.esri.arcgisruntime.layers.*;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -36,8 +38,21 @@ public class MainActivity extends AppCompatActivity
 	private void makeMapView()
 	{
 		mapView = (MapView) findViewById(R.id.map);
-		ArcGISMap map = new ArcGISMap(Basemap.Type.TOPOGRAPHIC, 34.056295, -117.195800, 16);
+		
+		// Coordinatensysteem EPSG:28992 (Amersfoort / RD new)
+		ArcGISMap map = new ArcGISMap(SpatialReference.create(28992));
 		mapView.setMap(map);
+		
+		// Maak basemap, een topografische basiskaart
+		WmtsLayer wmtsLayer = new WmtsLayer(getResources().getString(R.string.basemap_url), getResources().getString(R.string.basemap_id));
+		Basemap baseMap = new Basemap(wmtsLayer);
+		map.setBasemap(baseMap);
+		
+		// Maak operational layer, AHN kleurkaart
+		
+		
+		// Maak operational layer met plaatsnamen ter orientatie
+		
 	}
 
 	// Maak toolbar

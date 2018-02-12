@@ -44,22 +44,18 @@ public class MainActivity extends AppCompatActivity
 	private void makeMapView()
 	{
 		mapView = (MapView) findViewById(R.id.map);
-		mapView.setViewpoint(new Viewpoint(new Envelope(bbox[0], bbox[1], bbox[2], bbox[3], spatialReference)));
-		
 		ArcGISMap map = new ArcGISMap(spatialReference);
-		mapView.setMap(map);
+		map.setInitialViewpoint(new Viewpoint(new Envelope(bbox[0], bbox[1], bbox[2], bbox[3], spatialReference)));
+		
+		Log.i("HermLog", "bbox: " + bbox[0] + " " + bbox[1]  + " " +  bbox[2]  + " " +  bbox[3]);
+		Log.i("HermLog", "spatialReference: " + spatialReference.getWkid());
 		
 		// Maak basemap, een topografische basiskaart
-		WmtsService wmtsService = new WmtsService("https://geodata.nationaalgeoregister.nl/tiles/service/wmts?");
-		WmtsServiceInfo wmtsServiceInfo = wmtsService.getServiceInfo();
-		Log.i("HermLog", "wmtsServiceInfo: " + wmtsServiceInfo);
-		
-		String descr = wmtsServiceInfo.getDescription();
-		Log.i("HermLog", "Descr: " + descr);
-		
 		WmtsLayer wmtsLayer = new WmtsLayer(getResources().getString(R.string.basemap_url), getResources().getString(R.string.basemap_id));
 		Basemap baseMap = new Basemap(wmtsLayer);
 		map.setBasemap(baseMap);
+		
+		mapView.setMap(map);
 		
 		// Maak operational layer, AHN kleurkaart
 		

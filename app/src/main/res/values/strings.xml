@@ -5,7 +5,7 @@
 	<string name="google_maps_key">AIzaSyCno_hVSMtgIUeNod6t8WcmXvASzdjuazc</string>
 
 	<string name="basemap_id">top100raster</string>
-	<string name="basemap_url">https://geodata.nationaalgeoregister.nl/tiles/service/wmts?service=wmts</string>
+	<string name="basemap_url">https://geodata.nationaalgeoregister.nl/tiles/service/wmts?request=GetCapabilities&amp;service=WMTS</string>
 	
 	<string name="operational_layer_AHN_kleur_id"></string>
 	<string name="operational_layer_AHN_kleur_url"></string>

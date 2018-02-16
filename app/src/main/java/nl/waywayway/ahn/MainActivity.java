@@ -4,14 +4,13 @@ import android.content.*;
 import android.os.*;
 import android.support.v7.app.*;
 import android.support.v7.widget.*;
-import android.util.*;
 import android.view.*;
 import com.esri.arcgisruntime.*;
 import com.esri.arcgisruntime.geometry.*;
 import com.esri.arcgisruntime.layers.*;
 import com.esri.arcgisruntime.mapping.*;
 import com.esri.arcgisruntime.mapping.view.*;
-import com.esri.arcgisruntime.ogc.wmts.*;
+import com.esri.arcgisruntime.data.*;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -47,21 +46,16 @@ public class MainActivity extends AppCompatActivity
 		ArcGISMap map = new ArcGISMap(spatialReference);
 		map.setInitialViewpoint(new Viewpoint(new Envelope(bbox[0], bbox[1], bbox[2], bbox[3], spatialReference)));
 		
-		Log.i("HermLog", "bbox: " + bbox[0] + " " + bbox[1]  + " " +  bbox[2]  + " " +  bbox[3]);
-		Log.i("HermLog", "spatialReference: " + spatialReference.getWkid());
-		
-		// Maak basemap, een topografische basiskaart
-		WmtsLayer wmtsLayer = new WmtsLayer(getResources().getString(R.string.basemap_url), getResources().getString(R.string.basemap_id));
-		Basemap baseMap = new Basemap(wmtsLayer);
+		// Basemap
+		WmtsLayer wmtsLayerBase = new WmtsLayer(getResources().getString(R.string.basemap_url), getResources().getString(R.string.basemap_id));
+		Basemap baseMap = new Basemap(wmtsLayerBase);
 		map.setBasemap(baseMap);
 		
+		// Ahn2
+		WmtsLayer ahn2 = new WmtsLayer(getResources().getString(R.string.operational_layer_AHN2_kleur_url), getResources().getString(R.string.operational_layer_AHN2_kleur_id));
+        map.getOperationalLayers().add(ahn2);
+		
 		mapView.setMap(map);
-		
-		// Maak operational layer, AHN kleurkaart
-		
-		
-		// Maak operational layer met plaatsnamen ter orientatie
-		
 	}
 
 	// Maak toolbar

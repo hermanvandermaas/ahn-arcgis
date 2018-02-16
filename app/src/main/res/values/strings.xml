@@ -4,9 +4,9 @@
     <string name="app_name">AHN</string>
 	<string name="google_maps_key">AIzaSyCno_hVSMtgIUeNod6t8WcmXvASzdjuazc</string>
 
-	<string name="basemap_id">top100raster</string>
+	<string name="basemap_id">opentopoachtergrondkaart</string>
 	<string name="basemap_url">https://geodata.nationaalgeoregister.nl/tiles/service/wmts?request=GetCapabilities&amp;service=WMTS</string>
 	
-	<string name="operational_layer_AHN_kleur_id"></string>
-	<string name="operational_layer_AHN_kleur_url"></string>
+	<string name="operational_layer_AHN2_kleur_id">ahn2_05m_ruw</string>
+	<string name="operational_layer_AHN2_kleur_url">https://geodata.nationaalgeoregister.nl/tiles/service/wmts?request=GetCapabilities&amp;service=WMTS</string>
 </resources>

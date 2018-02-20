@@ -1,7 +1,10 @@
 package nl.waywayway.ahn;
 
 import android.content.*;
+import android.graphics.*;
+import android.graphics.drawable.*;
 import android.os.*;
+import android.support.v4.content.*;
 import android.support.v7.app.*;
 import android.support.v7.widget.*;
 import android.view.*;
@@ -10,16 +13,20 @@ import com.esri.arcgisruntime.geometry.*;
 import com.esri.arcgisruntime.layers.*;
 import com.esri.arcgisruntime.mapping.*;
 import com.esri.arcgisruntime.mapping.view.*;
-import com.esri.arcgisruntime.data.*;
+import com.esri.arcgisruntime.symbology.*;
+
+import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.util.*;
 
 public class MainActivity extends AppCompatActivity
 {
 	private Context context;
 	// Coordinatensysteem EPSG:28992 (Amersfoort / RD new)
 	private SpatialReference spatialReference = SpatialReference.create(28992);
-	// bbox (bounding box of envelope) is minx, miny, maxx, maxy
+	// bbox (bounding box / envelope) is minx, miny, maxx, maxy
 	private double[] bbox = new double[]{646.36, 308975.28, 276050.82, 636456.31};
 	private MapView mapView;
+	GraphicsOverlay graphicsOverlay;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -30,7 +37,7 @@ public class MainActivity extends AppCompatActivity
 		context = this;
 
 		makeToolbar();
-		setTransparentStatusBar();
+		//setTransparentStatusBar();
 		setLicense();
 		makeMapView();
     }
@@ -56,6 +63,52 @@ public class MainActivity extends AppCompatActivity
         map.getOperationalLayers().add(ahn2);
 		
 		mapView.setMap(map);
+		
+		// Listener for taps on the map view
+		mapView.setOnTouchListener(new DefaultMapViewOnTouchListener(MainActivity.this, mapView)
+		{
+			@Override
+			public boolean onSingleTapConfirmed(MotionEvent e) {
+				android.graphics.Point screenPoint = new android.graphics.Point(Math.round(e.getX()), Math.round(e.getY()));
+				//identifyResult(screenPoint);
+				//Snackbar.make(findViewById(R.id.coordinator), "tik", Snackbar.LENGTH_SHORT).show();
+				placeMarker(screenPoint);
+				
+				return true;
+			}
+		});
+		
+		// Laag voor markers
+		graphicsOverlay = new GraphicsOverlay();
+        mapView.getGraphicsOverlays().add(graphicsOverlay);
+	}
+	
+	// Plaats marker in juiste laag
+	private void placeMarker(final android.graphics.Point screenPoint)
+	{
+		// Verwijder bestaande markers
+		ListenableList graphicsList = graphicsOverlay.getGraphics();
+		graphicsList.clear();
+		
+		BitmapDrawable markerBitmap = (BitmapDrawable) ContextCompat.getDrawable(this, R.drawable.ic_marker);
+		final PictureMarkerSymbol markerSymbol = new PictureMarkerSymbol(markerBitmap);
+		//Optionally set the size, if not set the image will be auto sized based on its size in pixels,
+		//its appearance would then differ across devices with different resolutions.
+		markerSymbol.setHeight(26);
+		markerSymbol.setWidth(26);
+		//Optionally set the offset, to align the base of the symbol aligns with the point geometry
+		markerSymbol.setOffsetY(13); //The image used for the symbol has a transparent buffer around it, so the offset is not simply height/2
+		markerSymbol.loadAsync();
+
+		markerSymbol.addDoneLoadingListener(new Runnable()
+		{
+			@Override
+			public void run() {
+				Point graphicPoint = mapView.screenToLocation(screenPoint);
+				Graphic markerGraphic = new Graphic(graphicPoint, markerSymbol);
+				graphicsOverlay.getGraphics().add(markerGraphic);
+			}
+		});
 	}
 
 	// Maak toolbar
@@ -64,14 +117,14 @@ public class MainActivity extends AppCompatActivity
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		ActionBar actionBar = getSupportActionBar();
-		toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
+		//toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
 	}
 
 	private void setTransparentStatusBar()
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
 		{
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
 	}
 	

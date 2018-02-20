@@ -4,6 +4,10 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
+		
+		<item name="android:windowTranslucentNavigation">true</item>
+		<item name="android:windowTranslucentStatus">true</item>
+		<item name="android:fitsSystemWindows">false</item>
 	</style>
 
 	<style name="transparent_toolbar" parent="@style/ThemeOverlay.AppCompat.ActionBar">
